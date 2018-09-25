@@ -1,0 +1,11 @@
+<resources>
+    <string name="app_name">Inventory</string>
+
+
+    <string name="insert_new_task">insert new task</string>
+    <string name="action_delete_all_entries">delete list</string>
+
+    <string name="action_save">save</string>
+    <string name="action_delete">delete task</string>
+
+</resources>
