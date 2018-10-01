@@ -30,6 +30,7 @@ public class EditActivity extends AppCompatActivity {
     private ImageView orderImage;
     private int mType = 0;
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

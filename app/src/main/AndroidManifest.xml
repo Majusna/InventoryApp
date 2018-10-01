@@ -21,6 +21,11 @@
             android:parentActivityName=".MainActivity" >
 
         </activity>
+
+        <provider
+            android:name=".data.OrdersProvider"
+            android:authorities="com.example.android.inventory"
+            android:exported="false" />
     </application>
 
 </manifest>
