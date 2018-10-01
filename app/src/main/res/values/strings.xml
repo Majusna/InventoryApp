@@ -8,4 +8,12 @@
     <string name="action_save">save</string>
     <string name="action_delete">delete task</string>
 
+    <string name="no_type">else</string>
+    <string name="album_type">album</string>
+    <string name="greeting_card_type">greeting card</string>
+    <string name="inviting_card_type">inviting card</string>
+    <string name="decoration_type">decoration</string>
+    <string name="portrait_type">portrait</string>
+
+
 </resources>
