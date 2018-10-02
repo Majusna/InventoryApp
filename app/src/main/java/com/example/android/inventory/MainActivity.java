@@ -1,16 +1,25 @@
 package com.example.android.inventory;
+import android.app.LoaderManager;
 import android.content.ContentValues;
+import android.content.CursorLoader;
 import android.content.Intent;
+import android.content.Loader;
 import android.database.Cursor;
 import android.net.Uri;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.CursorAdapter;
+import android.widget.ListView;
 import android.widget.TextView;
 import com.example.android.inventory.data.OrdersContract.OrdersEntry;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements LoaderManager.LoaderCallbacks<Cursor> {
+
+    private static final int ORDERS_LOADER = 1;
+    OrdersAdapter mCursorAdapter;
 
 
     @Override
@@ -18,14 +27,20 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        displayOrder();
+        ListView listView = (ListView) findViewById(R.id.list);
+
+        // Find and set empty view on the ListView, so that it only shows when the list has 0 items.
+        View emptyView = findViewById(R.id.empty_view);
+        listView.setEmptyView(emptyView);
+
+        mCursorAdapter = new OrdersAdapter(this,null);
+        listView.setAdapter(mCursorAdapter);
+
+        getLoaderManager().initLoader(ORDERS_LOADER,null,this);
+
 
     }
-    @Override
-    protected void onStart(){
-        super.onStart();
-        displayOrder();
-    }
+
 
 
     @Override
@@ -50,75 +65,12 @@ public class MainActivity extends AppCompatActivity {
             case R.id.action_delete_all_entries:
 
                 insert();
-                displayOrder();
                 return true;
 
         }
         return super.onOptionsItemSelected(item);
     }
 
-
-    public void displayOrder(){
-
-
-        String [] projection = {
-                OrdersEntry._ID,
-                OrdersEntry.COLUMN_ORDER_TYPE,
-                OrdersEntry.COLUMN_QUANTITY,
-                OrdersEntry.COLUMN_DEADLINE};
-
-
-
-        Cursor cursor = getContentResolver().query(
-                OrdersEntry.CONTENT_URI,
-                projection,
-                null,
-                null,
-                null);
-
-        TextView displayView = (TextView) findViewById(R.id.text);
-
-
-
-        try {
-
-            displayView.setText("The table contains " + cursor.getCount() + " orders.\n\n");
-
-
-            // Figure out the index of each column
-            int idColumnIndex = cursor.getColumnIndex(OrdersEntry._ID);
-            int typeColumnIndex = cursor.getColumnIndex(OrdersEntry.COLUMN_ORDER_TYPE);
-            int quantityColumnIndex = cursor.getColumnIndex(OrdersEntry.COLUMN_QUANTITY);
-            int deadlineColumnIndex = cursor.getColumnIndex(OrdersEntry.COLUMN_DEADLINE);
-           //int currentImage = cursor.getInt(2);
-
-
-
-            // Iterate through all the returned rows in the cursor
-            while (cursor.moveToNext()) {
-                // Use that index to extract the String or Int value of the word
-                // at the current row the cursor is on.
-                int currentID = cursor.getInt(idColumnIndex);
-
-            String currenyType = cursor.getString(typeColumnIndex);
-            int currentQuantity = cursor.getInt(quantityColumnIndex);
-            String currentDeadline = cursor.getString(deadlineColumnIndex);
-                // Display the values from each column of the current row in the cursor in the TextView
-                displayView.append(("\n" + currentID + " - " +
-                        currenyType + " - " +
-                        currentQuantity + " - " +
-                        currentDeadline));
-
-
-
-            }
-        } finally {
-                // Always close the cursor when you're done reading from it. This releases all its
-                // resources and makes it invalid.
-                cursor.close();
-            }
-
-        }
 
 
     public void insert(){
@@ -134,4 +86,35 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
+    @Override
+    public Loader<Cursor> onCreateLoader(int i, Bundle bundle) {
+
+    String[] projection = {
+    OrdersEntry._ID,
+    OrdersEntry.COLUMN_ORDER_TYPE,
+    OrdersEntry.COLUMN_QUANTITY,
+    OrdersEntry.COLUMN_DEADLINE};
+
+    return new CursorLoader(this,
+            OrdersEntry.CONTENT_URI,
+            projection,
+            null,
+            null,
+            null
+            );
+    }
+
+    @Override
+    public void onLoadFinished(Loader<Cursor> loader, Cursor cursor) {
+
+        mCursorAdapter.swapCursor(cursor);
+
+    }
+
+    @Override
+    public void onLoaderReset(Loader<Cursor> loader) {
+
+        mCursorAdapter.swapCursor(null);
+
+    }
 }
