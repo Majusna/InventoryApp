@@ -1,10 +1,28 @@
 package com.example.android.inventory.data;
 
+import android.content.ContentResolver;
+import android.net.Uri;
 import android.provider.BaseColumns;
 
 public final class OrdersContract {
 
+    public static final String CONTENT_AUTHORITY = "com.example.android.inventory";
+    public static final Uri BASE_CONTENT_URI = Uri.parse("content://" + CONTENT_AUTHORITY);
+    public static final String PATH_ORDERS = "orders";
+
+
     public static final class OrdersEntry implements BaseColumns{
+
+        // the MIME type for a list of orders
+        public static final String CONTENT_LIST_TYPE =
+                ContentResolver.CURSOR_DIR_BASE_TYPE + "/" + CONTENT_AUTHORITY + "/" + PATH_ORDERS;
+        // the MIME type for a single order
+        public static final String CONTENT_ITEM_TYPE =
+                ContentResolver.CURSOR_ITEM_BASE_TYPE + "/" + CONTENT_AUTHORITY + "/" + PATH_ORDERS;
+
+
+
+        public static final Uri CONTENT_URI = Uri.withAppendedPath(BASE_CONTENT_URI, PATH_ORDERS);
 
         public static final String TABLE_NAME ="orders";
 

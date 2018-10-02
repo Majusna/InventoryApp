@@ -2,6 +2,7 @@ package com.example.android.inventory;
 
 import android.content.ContentValues;
 import android.database.sqlite.SQLiteDatabase;
+import android.net.Uri;
 import android.support.v4.app.NavUtils;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -51,8 +52,6 @@ public class EditActivity extends AppCompatActivity {
        String quantity = mQuantity.getText().toString().trim();
        Integer quantityInteger = Integer.parseInt(quantity);
 
-       mOrdersDbHelper = new OrdersDbHelper(this);
-       SQLiteDatabase db = mOrdersDbHelper.getWritableDatabase();
 
        ContentValues values = new ContentValues();
        values.put(OrdersEntry.COLUMN_ORDER_TYPE, mType);
@@ -60,16 +59,15 @@ public class EditActivity extends AppCompatActivity {
        values.put(OrdersEntry.COLUMN_DEADLINE,deadlineString );
        values.put(OrdersEntry.COLUMN_ORDER_IMAGE, String.valueOf(orderImage));
 
+       Uri newUri = getContentResolver().insert(OrdersEntry.CONTENT_URI,values);
 
-       // Insert a new row for pet in the database, returning the ID of that new row.
-       long newRowId = db.insert(OrdersEntry.TABLE_NAME, null, values);
        // Show a toast message depending on whether or not the insertion was successful
-       if (newRowId == -1) {
+       if (newUri == null) {
            // If the row ID is -1, then there was an error with insertion.
-           Toast.makeText(this, "Error with saving pet", Toast.LENGTH_SHORT).show();
+           Toast.makeText(this, "Error with saving order", Toast.LENGTH_SHORT).show();
        } else {
            // Otherwise, the insertion was successful and we can display a toast with the row ID.
-           Toast.makeText(this, "Pet saved with row id: " + newRowId, Toast.LENGTH_SHORT).show();
+           Toast.makeText(this, "order saved" , Toast.LENGTH_SHORT).show();
        }
 
 
