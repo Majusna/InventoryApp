@@ -6,6 +6,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CursorAdapter;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.android.inventory.data.OrdersContract;
@@ -24,14 +25,18 @@ public class OrdersAdapter extends CursorAdapter {
     @Override
     public void bindView(View view, Context context, Cursor cursor) {
 
+
+        ImageView imageView = (ImageView) view.findViewById(R.id.image_holder);
         TextView deadlineTextView = (TextView) view.findViewById(R.id.deadline_holder);
         TextView quantityTextView = (TextView) view.findViewById(R.id.quantity_holder);
 
         String deadline = cursor.getString(cursor.getColumnIndexOrThrow(OrdersContract.OrdersEntry.COLUMN_DEADLINE));
         Integer quantity = cursor.getInt(cursor.getColumnIndexOrThrow(OrdersContract.OrdersEntry.COLUMN_QUANTITY));
+        Integer pic = cursor.getInt(cursor.getColumnIndexOrThrow(OrdersContract.OrdersEntry.COLUMN_ORDER_IMAGE));
 
         deadlineTextView.setText(deadline);
         quantityTextView.setText(String.valueOf(quantity));
+        imageView.setImageResource(pic);
 
 
     }

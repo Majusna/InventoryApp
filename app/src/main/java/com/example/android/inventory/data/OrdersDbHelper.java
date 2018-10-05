@@ -24,7 +24,12 @@ public class OrdersDbHelper extends SQLiteOpenHelper {
                 + OrdersEntry.COLUMN_ORDER_IMAGE + " INTEGER, "
                 + OrdersEntry.COLUMN_ORDER_TYPE + " TEXT NOT NULL, "
                 + OrdersEntry.COLUMN_QUANTITY + " INTEGER NOT NULL DEFAULT 1, "
-                + OrdersEntry.COLUMN_DEADLINE + " TEXT NOT NULL);";
+                + OrdersEntry.COLUMN_DEADLINE + " TEXT, "
+                + OrdersEntry.COLUMN_CUSTOMER_NAME + " TEXT, "
+                + OrdersEntry.COLUMN_CUSTOMER_PHONE + " INTEGER, "
+                + OrdersEntry.COLUMN_CUSTOMER_MAIL + " TEXT, "
+                + OrdersEntry.COLUMN_CUSTOMER_ADRESS + " TEXT, "
+                + OrdersEntry.COLUMN_NOTES + " TEXT);";
 
         db.execSQL(SQL_CREATE_ORDERS_TABLE);
 

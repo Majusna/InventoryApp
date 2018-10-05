@@ -1,22 +1,25 @@
 package com.example.android.inventory;
 import android.app.LoaderManager;
+import android.content.ContentUris;
 import android.content.ContentValues;
 import android.content.CursorLoader;
 import android.content.Intent;
 import android.content.Loader;
 import android.database.Cursor;
 import android.net.Uri;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.CursorAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
 import com.example.android.inventory.data.OrdersContract.OrdersEntry;
 
-public class MainActivity extends AppCompatActivity implements LoaderManager.LoaderCallbacks<Cursor> {
+public class MainActivity extends AppCompatActivity implements LoaderManager.LoaderCallbacks<Cursor>   {
 
     private static final int ORDERS_LOADER = 1;
     OrdersAdapter mCursorAdapter;
@@ -36,7 +39,20 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
         mCursorAdapter = new OrdersAdapter(this,null);
         listView.setAdapter(mCursorAdapter);
 
-        getLoaderManager().initLoader(ORDERS_LOADER,null,this);
+        getLoaderManager().initLoader(ORDERS_LOADER, null, this);
+
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long id) {
+                Intent intent = new Intent(MainActivity.this, EditActivity.class);
+
+                Uri contentUri = ContentUris.withAppendedId(OrdersEntry.CONTENT_URI, id);
+                intent.setData(contentUri);
+
+                startActivity(intent);
+
+            }
+        });
 
 
     }
@@ -75,11 +91,15 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
 
     public void insert(){
 
+       Integer imageInt = getResources().getIdentifier("image_else","drawable",getPackageName());
+
 
         ContentValues values = new ContentValues();
         values.put(OrdersEntry.COLUMN_ORDER_TYPE, OrdersEntry.TYPE_ALBUM);
         values.put(OrdersEntry.COLUMN_QUANTITY, 3);
         values.put(OrdersEntry.COLUMN_DEADLINE, "24.08");
+        values.put(OrdersEntry.COLUMN_ORDER_IMAGE,imageInt);
+
 
 
         Uri newUri = getContentResolver().insert(OrdersEntry.CONTENT_URI,values);
@@ -89,31 +109,32 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
     @Override
     public Loader<Cursor> onCreateLoader(int i, Bundle bundle) {
 
-    String[] projection = {
-    OrdersEntry._ID,
-    OrdersEntry.COLUMN_ORDER_TYPE,
-    OrdersEntry.COLUMN_QUANTITY,
-    OrdersEntry.COLUMN_DEADLINE};
 
-    return new CursorLoader(this,
-            OrdersEntry.CONTENT_URI,
-            projection,
-            null,
-            null,
-            null
-            );
+
+        String[] projection = {
+                OrdersEntry._ID,
+                OrdersEntry.COLUMN_ORDER_IMAGE,
+                OrdersEntry.COLUMN_ORDER_TYPE,
+                OrdersEntry.COLUMN_QUANTITY,
+                OrdersEntry.COLUMN_DEADLINE};
+
+        return new CursorLoader(this,
+                OrdersEntry.CONTENT_URI,
+                projection,
+                null,
+                null,
+                null
+        );
     }
 
     @Override
     public void onLoadFinished(Loader<Cursor> loader, Cursor cursor) {
-
         mCursorAdapter.swapCursor(cursor);
 
     }
 
     @Override
     public void onLoaderReset(Loader<Cursor> loader) {
-
         mCursorAdapter.swapCursor(null);
 
     }

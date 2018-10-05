@@ -75,6 +75,7 @@ public class OrdersProvider extends ContentProvider {
             default:
                 throw new IllegalArgumentException("Cannot query unknown URI " + uri);
         }
+        cursor.setNotificationUri(getContext().getContentResolver(),uri);
         return cursor;
     }
 
@@ -118,7 +119,7 @@ public class OrdersProvider extends ContentProvider {
         //sanitary check
         String deadline = values.getAsString(OrdersEntry.COLUMN_DEADLINE);
         if (deadline == null) {
-            throw new IllegalArgumentException("order requires a quantity");
+            throw new IllegalArgumentException("order requires a deadline");
         }
         //sanitary check
         Integer type = values.getAsInteger(OrdersEntry.COLUMN_ORDER_TYPE);
@@ -135,6 +136,8 @@ public class OrdersProvider extends ContentProvider {
             Log.e("orders provider", "Failed to insert row for " + uri);
             return null;}
 
+            getContext().getContentResolver().notifyChange(uri,null);
+
         // Once we know the ID of the new row in the table,
         // return the new URI with the ID appended to the end of it
         return ContentUris.withAppendedId(uri, id);
@@ -142,22 +145,34 @@ public class OrdersProvider extends ContentProvider {
 
     @Override
     public int delete(Uri uri, String selection, String[] selectionArgs) {
+
         // Get writeable database
         SQLiteDatabase database = mDbHelper.getWritableDatabase();
+
+        int rowsDeleted;
 
         final int match = sUriMatcher.match(uri);
         switch (match) {
             case ORDERS:
                 // Delete all rows that match the selection and selection args
-                return database.delete(OrdersEntry.TABLE_NAME, selection, selectionArgs);
+                rowsDeleted = database.delete(OrdersEntry.TABLE_NAME, selection, selectionArgs);
+                break;
             case ORDER_ID:
                 // Delete a single row given by the ID in the URI
                 selection = OrdersEntry._ID + "=?";
-                selectionArgs = new String[] { String.valueOf(ContentUris.parseId(uri)) };
-                return database.delete(OrdersEntry.TABLE_NAME, selection, selectionArgs);
+                selectionArgs = new String[]{String.valueOf(ContentUris.parseId(uri))};
+                rowsDeleted = database.delete(OrdersEntry.TABLE_NAME, selection, selectionArgs);
+                break;
             default:
                 throw new IllegalArgumentException("Deletion is not supported for " + uri);
+
         }
+
+        if (rowsDeleted != 0) {
+            getContext().getContentResolver().notifyChange(uri, null);
+                    }
+                    return rowsDeleted;
+
     }
 
     @Override
@@ -216,10 +231,14 @@ public class OrdersProvider extends ContentProvider {
 
             SQLiteDatabase database = mDbHelper.getWritableDatabase();
 
-            Integer numOfRows = database.update(OrdersEntry.TABLE_NAME, values, null, null);
+            int rowsUpdated = database.update(OrdersEntry.TABLE_NAME, values, null, null);
+
+        if (rowsUpdated != 0) {
+            getContext().getContentResolver().notifyChange(uri, null);
+        }
 
 
-            return numOfRows;
+            return rowsUpdated;
 
         }
 }

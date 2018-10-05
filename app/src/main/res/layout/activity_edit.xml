@@ -1,117 +1,128 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+
+
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
     android:background="#efebe9"
+
     tools:context=".EditActivity">
 
-        <RelativeLayout
-            android:paddingBottom="8dp"
-            android:paddingTop="8dp"
-            android:background="#fafafa"
-            android:layout_margin="8dp"
-            android:layout_width="match_parent"
-            android:layout_height="160dp">
-
-                <ImageView
-                    android:src="@drawable/placeholder"
-                    android:layout_alignParentLeft="true"
-                    android:layout_centerVertical="true"
-                    android:layout_marginLeft="8dp"
-                    android:layout_marginRight="8dp"
-                    android:id="@+id/order_image"
-                    android:layout_width="120dp"
-                    android:layout_height="match_parent" />
-
-
-                 <Spinner
-                     android:layout_toRightOf="@id/order_image"
-                     android:id="@+id/choose_order_type"
-                     android:layout_width="wrap_content"
-                     android:layout_height="wrap_content"
-                     android:spinnerMode="dropdown"/>
-
-                <EditText
-                    android:layout_toRightOf="@id/order_image"
-                    android:layout_below = "@id/choose_order_type"
-                    android:id="@+id/edit_order_quantity"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:inputType="number"
-                    android:hint="quantity"/>
-
-                <EditText
-                    android:layout_toRightOf="@id/order_image"
-                    android:layout_below = "@id/edit_order_quantity"
-                    android:id="@+id/edit_order_deadline"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:hint="deadline"
-                    android:inputType="date"/>
-
-
-        </RelativeLayout>
-
-        <LinearLayout
-            android:background="#fafafa"
-            android:layout_margin="8dp"
-            android:orientation="vertical"
-            android:layout_width="match_parent"
-            android:layout_height="160dp">
-
-                <EditText
-                    android:id="@+id/edit_customer_name"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:hint="customer name"
-                    android:inputType="textCapWords"/>
-
-                <EditText
-
-                    android:id="@+id/edit_customer_mail"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:inputType="textWebEmailAddress"
-                    android:hint="mail"/>
-
-                <EditText
-                    android:id="@+id/edit_customer_phone_number"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:inputType="number"
-                    android:hint="phone number"/>
-
-
-        </LinearLayout>
-
         <LinearLayout
             android:layout_width="match_parent"
-            android:orientation="vertical"
             android:layout_height="match_parent"
-            android:background="#fafafa"
-            android:layout_margin="8dp">
+            android:orientation="vertical">
 
-                <TextView
+                <RelativeLayout
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="comment" />
+                    android:layout_height="160dp"
+                    android:layout_margin="8dp"
+                    android:background="#fafafa"
+                    android:paddingBottom="8dp"
+                    android:paddingTop="8dp">
 
-                <EditText
-                    android:id="@+id/test"
-                    android:hint="here"
-                    android:paddingTop="16dp"
+                        <ImageView
+                            android:id="@+id/order_image"
+                            android:layout_width="120dp"
+                            android:layout_height="match_parent"
+                            android:layout_alignParentLeft="true"
+                            android:layout_centerVertical="true"
+                            android:layout_marginLeft="8dp"
+                            android:layout_marginRight="8dp"
+                            android:src="@drawable/placeholder" />
+
+
+                        <Spinner
+                            android:id="@+id/choose_order_type"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_toRightOf="@id/order_image"
+                            android:spinnerMode="dropdown" />
+
+                        <EditText
+                            android:id="@+id/edit_order_quantity"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_below="@id/choose_order_type"
+                            android:layout_toRightOf="@id/order_image"
+                            android:hint="quantity"
+                            android:inputType="number"
+                            android:maxLength="4" />
+
+                        <EditText
+                            android:id="@+id/edit_order_deadline"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_below="@id/edit_order_quantity"
+                            android:layout_toRightOf="@id/order_image"
+                            android:ems="10"
+                            android:hint="deadline"
+                            android:inputType="date" />
+
+
+                </RelativeLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="160dp"
+                    android:layout_margin="8dp"
+                    android:background="#fafafa"
+                    android:orientation="vertical">
+
+                        <EditText
+                            android:id="@+id/edit_customer_name"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:hint="customer name"
+                            android:inputType="textPersonName" />
+
+                        <EditText
+
+                            android:id="@+id/edit_customer_mail"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:hint="mail"
+                            android:inputType="textEmailAddress" />
+
+                        <EditText
+                            android:id="@+id/edit_customer_phone_number"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:hint="phone number"
+                            android:inputType="phone" />
+
+
+                </LinearLayout>
+
+                <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:inputType="textMultiLine"
-                    android:gravity="left"
-                    android:maxLines="4"
-                    />
+                    android:layout_margin="8dp"
+                    android:background="#fafafa"
+                    android:orientation="vertical">
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="comment" />
+
+                        <EditText
+                            android:id="@+id/test"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:gravity="left"
+                            android:hint="here"
+                            android:inputType="textMultiLine"
+                            android:maxLines="6"
+                            android:paddingTop="16dp" />
 
 
+                </LinearLayout>
 
         </LinearLayout>
 
-</LinearLayout>
+
+
+</ScrollView>
+
