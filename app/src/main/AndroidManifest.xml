@@ -18,7 +18,8 @@
         </activity>
         <activity android:name=".EditActivity"
             android:parentActivityName=".MainActivity" >
-
+    </activity>
+        <activity android:name=".CalendarActivity" >
         </activity>
 
         <provider

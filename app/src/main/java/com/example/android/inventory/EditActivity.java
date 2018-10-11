@@ -1,14 +1,9 @@
 package com.example.android.inventory;
 
 import android.content.ContentValues;
-import android.content.CursorLoader;
 import android.content.Intent;
-import android.database.Cursor;
-import android.media.Image;
 import android.net.Uri;
-import android.support.v4.app.LoaderManager;
 import android.support.v4.app.NavUtils;
-import android.support.v4.content.Loader;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.TextUtils;
@@ -17,23 +12,25 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.CalendarView;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.android.inventory.data.OrdersContract.OrdersEntry;
 
 
-
 public class EditActivity extends AppCompatActivity {
 
+    private TextView mDateTextView;
     private Spinner mTypeSpinner;
     private EditText mQuantity;
-    private EditText mDeadline;
     private ImageView orderImage;
     private int mType = 0;
     private Integer mImageInt ;
+
 
 
     @Override
@@ -52,18 +49,29 @@ public class EditActivity extends AppCompatActivity {
 
         }
 
-
         orderImage = findViewById(R.id.order_image);
         mTypeSpinner = findViewById(R.id.choose_order_type);
         mQuantity = findViewById(R.id.edit_order_quantity);
-        mDeadline = findViewById(R.id.edit_order_deadline);
+        mDateTextView = findViewById(R.id.edit_order_deadline);
+
+        Intent dateIntent = getIntent();
+        String date = dateIntent.getStringExtra("date");
+        mDateTextView.setText(date);
+
+        mDateTextView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(EditActivity.this, CalendarActivity.class);
+                startActivity(intent);
+            }
+        });
 
         setupSpinner();
     }
 
     public void insertOrder(){
 
-        String deadlineString = mDeadline.getText().toString().trim();
+        String dateString = mDateTextView.getText().toString().trim();
         String quantity = mQuantity.getText().toString().trim();
         Integer quantityInteger = Integer.parseInt(quantity);
 
@@ -71,7 +79,7 @@ public class EditActivity extends AppCompatActivity {
         ContentValues values = new ContentValues();
         values.put(OrdersEntry.COLUMN_ORDER_TYPE, mType);
         values.put(OrdersEntry.COLUMN_QUANTITY, quantityInteger);
-        values.put(OrdersEntry.COLUMN_DEADLINE,deadlineString );
+        values.put(OrdersEntry.COLUMN_DEADLINE, dateString);
         values.put(OrdersEntry.COLUMN_ORDER_IMAGE,mImageInt);
 
         Uri newUri = getContentResolver().insert(OrdersEntry.CONTENT_URI,values);
@@ -164,7 +172,8 @@ public class EditActivity extends AppCompatActivity {
             // Respond to a click on the "Save" menu option
             case R.id.action_save:
                 insertOrder();
-                finish();
+                Intent i = new Intent(EditActivity.this, MainActivity.class);
+                startActivity(i);
                 return true;
 
             // Respond to a click on the "Delete" menu option

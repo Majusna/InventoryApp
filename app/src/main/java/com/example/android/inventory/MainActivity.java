@@ -10,6 +10,7 @@ import android.net.Uri;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -17,6 +18,8 @@ import android.widget.AdapterView;
 import android.widget.CursorAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
+
 import com.example.android.inventory.data.OrdersContract.OrdersEntry;
 
 public class MainActivity extends AppCompatActivity implements LoaderManager.LoaderCallbacks<Cursor>   {
@@ -100,9 +103,9 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
         values.put(OrdersEntry.COLUMN_DEADLINE, "24.08");
         values.put(OrdersEntry.COLUMN_ORDER_IMAGE,imageInt);
 
-
-
         Uri newUri = getContentResolver().insert(OrdersEntry.CONTENT_URI,values);
+
+
     }
 
 
@@ -129,13 +132,13 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
 
     @Override
     public void onLoadFinished(Loader<Cursor> loader, Cursor cursor) {
-        mCursorAdapter.swapCursor(cursor);
+        mCursorAdapter.changeCursor(cursor);
 
     }
 
     @Override
     public void onLoaderReset(Loader<Cursor> loader) {
-        mCursorAdapter.swapCursor(null);
+        mCursorAdapter.changeCursor(null);
 
     }
 }
